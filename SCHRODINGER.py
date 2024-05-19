@@ -6,12 +6,14 @@ import matplotlib.pyplot as plt
 
 q2_e0 = ((1.60217646e-2)**2)/ 8.854187812e-1
 
-N = 256 #LOD of wavefunction
-plot_size = 6 # Scale of plots
+N = 128 #LOD of wavefunction
+plot_size = 6# Scale of plots
 #Change potential accordingly
-def get_potential(x, y, epsilon=1e-9):
-    return 0*x#q2_e0 / (2 * np.pi * np.sqrt((x - 0.5)**2 + (y - 0.5)**2 + epsilon))
-
+def get_potential(x, y, epsilon=1):
+    # distance_from_center = np.sqrt((x - 0.5)**2 + (y - 0.5)**2)    
+    # V = np.full_like(x, 64)    
+    # V[distance_from_center <= 0.5] = 0    
+    return (1/epsilon)-1/ (np.sqrt((x-0.5)**2 + (y-0.5)**2) + epsilon)
 
 X, Y = np.mgrid[0:1:N*1j,0:1:N*1j]
 V = get_potential(X,Y)
@@ -29,12 +31,12 @@ ax = axs[0, 0]
 for n in range(plot_size**2):
     ax = axs[n // plot_size, n % plot_size]
     c = ax.pcolormesh(X, Y, eigenvecs.T[n].reshape((N,N))**2, shading='auto')
-    ax.set_title(f'n={n}')
+    ax.set_title(f'E={values[n]*1.60218e-19:.2e}J')
     ax.axis('off')
-    # ax.legend().set_visible(False)
-    fig.colorbar(c, ax=ax)
+    # fig.legend("test").remove()
+    # fig.colorbar(c, ax=ax)
 
-plt.tight_layout(pad=0)
+plt.tight_layout()
 plt.axis('off')
 plt.show()
 
